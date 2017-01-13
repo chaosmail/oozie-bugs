@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<workflow-app xmlns="uri:oozie:workflow:0.5" name="test-wf">
+
+  <global>
+    <job-tracker>${jobTracker}</job-tracker>
+    <name-node>${nameNode}</name-node>
+    <configuration>
+      <property>
+        <name>mapreduce.job.queuename</name>
+        <value>${queueName}</value>
+      </property>
+      <property>
+        <name>tez.queue.name</name>
+        <value>${queueName}</value>
+      </property>
+      <property>
+        <name>oozie.launcher.mapred.job.queue.name</name>
+        <value>${queueNameLauncher}</value>
+      </property>
+    </configuration>
+  </global>
+
+  <!-- Start action -->
+  <start to="test-action"/>
+
+  <action name="test-action">
+    <hive2 xmlns="uri:oozie:hive2-action:0.1">
+      <jdbc-url>${jdbcURL}</jdbc-url>
+      <script>query.hive</script>
+      <file>hive/query.hive#query.hive</file>
+    </hive2>
+    <ok to="end"/>
+    <error to="fail"/>
+  </action>
+
+  <!-- Error handling -->
+  <kill name="fail">
+    <message>Backup failed [error: ${wf:errorMessage(wf:lastErrorNode())}]</message>
+  </kill>
+
+  <!-- End action -->
+  <end name="end"/>
+</workflow-app>
