@@ -28,7 +28,8 @@
     <hive2 xmlns="uri:oozie:hive2-action:0.1">
       <jdbc-url>${jdbcURL}</jdbc-url>
       <script>query.hive</script>
-      <argument>-i init.hive</argument>
+      <argument>-i</argument>
+      <argument>init.hive</argument>
       <file>init.hive#init.hive</file>
     </hive2>
     <ok to="end"/>
